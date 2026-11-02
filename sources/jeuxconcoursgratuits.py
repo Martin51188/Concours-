@@ -30,6 +30,13 @@ def _une_carte(a):
     lots = re.sub(r"\b(Participation libre|Tirage au sort)\b", "", lots)
     lots = re.sub(r"\s+", " ", lots).strip(" ·•-")
     vals = montants(propre)
+    # Ici la valeur entre parenthèses est le total de tous les lots : on la ramène à un lot.
+    paren = montants(" ".join(re.findall(r"\(([^)]*€[^)]*)\)", propre)))
+    qte = re.match(r"\s*(\d{1,3}(?:[ .]\d{3})*|\d+)\s", lots)
+    if paren and qte:
+        n = int(re.sub(r"[ .]", "", qte.group(1)))
+        if n > 1:
+            vals = [max(paren) / n]
     orga = slug.rsplit("-", 1)[0].split("-")[0].title()
     return {
         "id": f"jcg-{cid}", "source": NOM, "titre": lots[:160], "organisateur": orga,

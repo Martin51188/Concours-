@@ -30,6 +30,8 @@ def _fin(brut):
 
 
 def _entree(nom, prefixe, url, brut, titre, lots):
+    if re.search(r"\b(expired|ended|closed)\b", brut[:200], re.I):
+        return None
     vals = dollars(brut)
     t = type_depuis_texte(brut)
     return {
@@ -66,7 +68,9 @@ class SweepstakesBible:
                     continue
                 titre = re.split(r"\s+Open For", brut)[0]
                 titre = re.sub(r"^\d{4}\s+", "", titre)
-                out.append(_entree(self.NOM, "sbw", href, brut, titre, titre))
+                e = _entree(self.NOM, "sbw", href, brut, titre, titre)
+                if e:
+                    out.append(e)
                 nouveaux += 1
             if not nouveaux:
                 break
@@ -97,7 +101,9 @@ class SweepsDB:
             m = re.match(r"\d{1,2} \w{3}\s+(.+?)\s+Ends in", brut)
             titre = m.group(1) if m else brut[:90]
             desc = re.split(r"\d+ winners?|Entries", brut, maxsplit=1)[-1]
-            out.append(_entree(self.NOM, "sdb", href, brut, titre, f"{titre} — {desc.strip()}"))
+            e = _entree(self.NOM, "sdb", href, brut, titre, f"{titre} — {desc.strip()}")
+            if e:
+                out.append(e)
         return out
 
 
