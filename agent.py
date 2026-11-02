@@ -38,7 +38,7 @@ SOURCES = [jeu_concours_biz, toutgagner, jeuxconcoursgratuits, concours_du_net, 
 CONFIG_DEFAUT = {
     "valeur_min": 100,
     "jours_min": 0,
-    "types_exclus": [],
+    "types_exclus": ["instagram", "facebook"],
     "mots_exclus": ["achat obligatoire", "preuve d'achat", "ticket de caisse", "réservé aux enfants",
                     "belgique uniquement", "suisse uniquement", "canada", "québec", "luxembourg uniquement",
                     "us residents only", "u.s. residents", "legal residents of the united states", "open to us", "usa only", "uk residents only", "uk only", "residents of canada"],
@@ -124,25 +124,55 @@ def garder(c, cfg, auj):
     return True, ""
 
 
-def score(c, cfg, auj):
+def score_detail(c, cfg, auj):
+    """Score sur 100 : valeur du lot (60 max), fin proche (15), simplicité (15), lot recherché (10)."""
+    d = []
     v = c["valeur"] or 0
-    s = math.log10(max(v, 10)) * 2.5                    # 100 € → 5 ; 1 000 € → 7,5 ; 10 000 € → 10
-    if c.get("valeur_estimee"):
-        s -= 0.7
+    if v:
+        pts = round(max(0.0, min(60.0, (math.log10(max(v, 10)) - 1.3) * 22)))   # 100 € ≈ 15 · 1 000 € ≈ 37 · 10 000 € ≈ 60
+        d.append([f"Valeur du lot ({int(v):,} €)".replace(",", " "), pts])
+        if c.get("valeur_estimee"):
+            d.append(["Valeur estimée (pas affichée par l'organisateur)", -5])
+    else:
+        d.append(["Valeur non indiquée", 10])
     if c["fin"]:
-        j = (dt.date.fromisoformat(c["fin"]) if isinstance(c["fin"], str) else c["fin"]) - auj
-        s += 1.2 if j.days <= 2 else 0.6 if j.days <= 7 else 0
-    s += {"tirage": 0.8, "instant": 0.6, "autre": 0, "facebook": -0.5, "instagram": -0.8}.get(c["type"], 0)
+        fin = dt.date.fromisoformat(c["fin"]) if isinstance(c["fin"], str) else c["fin"]
+        j = (fin - auj).days
+        if j <= 2:
+            d.append(["Se termine " + ("aujourd'hui" if j <= 0 else "demain" if j == 1 else "dans 2 jours"), 15])
+        elif j <= 7:
+            d.append([f"Se termine dans {j} jours", 8])
+    simp = {"tirage": ["Tirage au sort simple", 15], "instant": ["Instant gagnant", 10],
+            "autre": ["Participation classique", 8]}.get(c["type"])
+    if simp:
+        d.append(simp)
     t = sans_accents(c["lots"])
     if any(sans_accents(m.strip()) in t for m in cfg["mots_voulus"] if m.strip()):
-        s += 1.5
-    return round(s, 2)
+        d.append(["Lot que tu recherches", 10])
+    return max(0, min(100, sum(p for _, p in d))), d
+
+
+def score(c, cfg, auj):
+    return score_detail(c, cfg, auj)[0]
 
 
 def cle_doublon(c):
     """Le même concours apparaît souvent sur plusieurs sites : organisateur + date de fin + valeur."""
     orga = re.sub(r"[^a-z0-9]", "", sans_accents(c["organisateur"] or c["titre"]))[:12]
     return f"{orga}|{c['fin'] or ''}|{int(c['valeur'] or 0)}"
+
+
+def est_doublon(db, c, fin):
+    """Même concours vu sur un autre site : même clé, ou même valeur (≥ 50 €) avec une date de fin à ±2 jours."""
+    if db.execute("SELECT 1 FROM concours WHERE cle=? AND id<>?", (c["cle"], c["id"])).fetchone():
+        return True
+    if not c["valeur"] or c["valeur"] < 50 or not fin:
+        return False
+    for (f,) in db.execute("SELECT fin FROM concours WHERE valeur=? AND fin IS NOT NULL AND id<>?",
+                           (c["valeur"], c["id"])):
+        if abs((dt.date.fromisoformat(f) - dt.date.fromisoformat(fin)).days) <= 2:
+            return True
+    return False
 
 
 # ---------------- passage complet ----------------
@@ -171,6 +201,7 @@ def collecter():
         ok, raison = garder(c, cfg, auj)
         if not ok:
             rejets[raison] = rejets.get(raison, 0) + 1
+            db.execute("DELETE FROM concours WHERE id=? AND statut='nouveau'", (c["id"],))
             continue
         c["cle"] = cle_doublon(c)
         fin = c["fin"].isoformat() if c["fin"] else None
@@ -179,7 +210,7 @@ def collecter():
             db.execute("UPDATE concours SET vu_le=?, valeur=?, valeur_estimee=?, fin=?, lots=? WHERE id=?",
                        (auj.isoformat(), c["valeur"], c["valeur_estimee"], fin, c["lots"], c["id"]))
             continue
-        if c["valeur"] and db.execute("SELECT 1 FROM concours WHERE cle=?", (c["cle"],)).fetchone():
+        if est_doublon(db, c, fin):
             rejets["doublon"] = rejets.get("doublon", 0) + 1
             continue
         db.execute("""INSERT INTO concours (id, source, titre, organisateur, lots, valeur, valeur_estimee, fin,
@@ -217,7 +248,7 @@ def liste_concours():
         if not c["organisateur"]:
             c["organisateur"] = c["titre"]
         c["valeur_estimee"] = bool(c["valeur_estimee"])
-        c["score"] = score(c, cfg, auj)
+        c["score"], c["score_detail"] = score_detail(c, cfg, auj)
         out.append(c)
     out.sort(key=lambda c: -c["score"])
     faits = [c for c in out if c["statut"] == "participe"]

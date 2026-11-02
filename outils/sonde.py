@@ -5,15 +5,20 @@ import requests
 from sources.commun import UA
 
 PAGES = {
-    "sb_worldwide": "https://www.sweepstakesbible.com/tags/worldwide",
-    "sa_intl": "https://www.sweepsadvantage.com/international-sweepstakes",
-    "os_worldwide": "https://online-sweepstakes.com/worldwide-giveaway/",
-    "gl_intl": "https://giveawaylisting.com/international-giveaway-list/",
-    "ofertar": "https://ofertar.pt/global-giveaways",
-    "sweepsdb": "https://sweepsdb.com/",
-    "giveawaydrop": "https://giveawaydrop.com/",
-    "paradis_fr": "https://www.leparadisdesjeuxconcours.fr/",
-    "c2000": "https://www.concours2000.com/",
+    "det_jeuxconcoursgratuits_0": "https://jeuxconcoursgratuits.fr/concours/cash/pepsico-100-000-menus-colonel-original-gubi",
+    "det_jeuxconcoursgratuits_1": "https://jeuxconcoursgratuits.fr/concours/high-tech/rainbow6-ubi-com-ordinateur-gamer-4250-pctn",
+    "det_sweepstakesbible_0": "https://www.sweepstakesbible.com/giveaways/ski-utah-super-stoked-snowy-sweepstakes-2026",
+    "det_sweepstakesbible_1": "https://www.sweepstakesbible.com/giveaways/pfl-road-to-dubai-trip-sweepstakes",
+    "det_toutgagner_0": "https://toutgagner.com/concours/g2217639.html",
+    "det_toutgagner_1": "https://toutgagner.com/concours/g2219036.html",
+    "det_jeu-concours_0": "https://www.jeu-concours.biz/concours/479875.html",
+    "det_jeu-concours_1": "https://www.jeu-concours.biz/concours/480935.html",
+    "det_ledemondujeu_0": "https://www.ledemondujeu.com/concours-delko.fr-gagnez-1-voiture-100-electrique-customisee-par-un-artiste-jusqu-au-30-novembre-2026.php",
+    "det_ledemondujeu_1": "https://www.ledemondujeu.com/concours-ici.fr-gagnez-2-bons-sejours-belambra-clubs-de-5000-jusqu-au-06-novembre-2026.php",
+    "det_concours-du-net_0": "https://www.concours-du-net.com/jeu-concours-vertbaudet-aa0f1394d75408ff",
+    "det_concours-du-net_1": "https://www.concours-du-net.com/jeu-concours-thebradery-be33de57cfcd6111",
+    "det_sweepsdb_0": "https://sweepsdb.com/go/10237817",
+    "det_sweepsdb_1": "https://sweepsdb.com/go/10239440",
 }
 out = pathlib.Path("sonde"); out.mkdir(exist_ok=True)
 for nom, url in PAGES.items():

@@ -1,7 +1,10 @@
 {
   "valeur_min": 100,
   "jours_min": 0,
-  "types_exclus": [],
+  "types_exclus": [
+    "instagram",
+    "facebook"
+  ],
   "mots_exclus": [
     "achat obligatoire",
     "preuve d'achat",

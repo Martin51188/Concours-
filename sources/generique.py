@@ -26,6 +26,9 @@ class Source:
         lots = m.group(1) if m else brut
         lots = re.sub(r"\s+", " ", _BRUIT.sub(" ", lots)).strip(" •·-")
         vals = montants(lots)
+        par_lot = montants(" ".join(re.findall(r"\(([^)]*€[^)]*)\)", lots)))
+        if par_lot:   # « 1 000 planchas (90 €) » : la valeur entre parenthèses est celle d'un lot
+            vals = par_lot
         fin = (self.fin_depuis_url(url) if self.fin_depuis_url else None) or date_fin_depuis_texte(brut)
         orga = self.orga_depuis_url(url) if self.orga_depuis_url else ""
         return {
