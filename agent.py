@@ -26,20 +26,22 @@ import urllib.request
 
 from sources import jeu_concours_biz, toutgagner, jeuxconcoursgratuits
 from sources.autres import concours_du_net, demon_du_jeu
+from sources.monde import sweepstakes_bible, sweepsdb
 from sources.commun import estimer_valeur, sans_accents
 
 ICI = Path(__file__).resolve().parent
 CONFIG = ICI / "config.json"
 BASE_DONNEES = ICI / "data" / "concours.db"
 JOURNAL = ICI / "data" / "journal.txt"
-SOURCES = [jeu_concours_biz, toutgagner, jeuxconcoursgratuits, concours_du_net, demon_du_jeu]
+SOURCES = [jeu_concours_biz, toutgagner, jeuxconcoursgratuits, concours_du_net, demon_du_jeu, sweepstakes_bible, sweepsdb]
 
 CONFIG_DEFAUT = {
     "valeur_min": 100,
     "jours_min": 0,
     "types_exclus": [],
     "mots_exclus": ["achat obligatoire", "preuve d'achat", "ticket de caisse", "réservé aux enfants",
-                    "belgique uniquement", "suisse uniquement", "canada", "québec", "luxembourg uniquement"],
+                    "belgique uniquement", "suisse uniquement", "canada", "québec", "luxembourg uniquement",
+                    "us residents only", "u.s. residents", "legal residents of the united states", "open to us", "usa only", "uk residents only", "uk only", "residents of canada"],
     "mots_voulus": ["iphone", "ps5", "voyage", "chèque", "carte cadeau", "ordinateur", "switch"],
     "age_utilisateur": 18,
     "profil": {"civilite": "M.", "prenom": "", "nom": "", "email": "", "telephone": "",
@@ -206,6 +208,10 @@ def liste_concours():
         if c["fin"] and c["fin"] < auj.isoformat() and c["statut"] != "participe":
             continue  # terminé : on ne l'affiche plus
         c.pop("texte_brut", None)
+        if re.fullmatch(r"(?i)\s*(participer|je participe|jouer|x+)?\s*", c["titre"] or ""):
+            c["titre"] = c["organisateur"] or re.split(r"[.,(]", c["lots"])[0][:70]
+        if not c["organisateur"]:
+            c["organisateur"] = c["titre"]
         c["valeur_estimee"] = bool(c["valeur_estimee"])
         c["score"] = score(c, cfg, auj)
         out.append(c)
