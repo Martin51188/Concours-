@@ -6,3 +6,11 @@
 2026-11-02 23:29 457 lus, 364 nouveaux retenus, écartés : {'valeur trop faible': 37, 'doublon': 6, "tranche d'âge": 1, "mot exclu « preuve d'achat »": 1, 'se termine trop tôt': 46, 'mot exclu « canada »': 1}
 2026-11-02 23:29 concours.json publié (364 concours)
 2026-11-02 23:30 notification envoyée (113 concours)
+2026-11-02 23:32 [jeu-concours.biz] 179 concours lus
+2026-11-02 23:32 [toutgagner.com] 77 concours lus
+2026-11-02 23:32 [jeuxconcoursgratuits.fr] 101 concours lus
+2026-11-02 23:32 [concours-du-net.com] 48 concours lus
+2026-11-02 23:33 [ledemondujeu.com] 231 concours lus
+2026-11-02 23:33 636 lus, 165 nouveaux retenus, écartés : {'doublon': 8, 'valeur trop faible': 48, "mot exclu « preuve d'achat »": 2, 'infos incomplètes': 1, "tranche d'âge": 1, 'se termine trop tôt': 46, 'mot exclu « canada »': 1}
+2026-11-02 23:33 concours.json publié (529 concours)
+2026-11-02 23:33 notification envoyée (17 concours)
