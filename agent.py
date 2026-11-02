@@ -220,7 +220,21 @@ def collecter():
     # Lien direct vers le formulaire + repérage des concours qui se jouent sur un réseau social
     resoudre_tous(candidats, journal=journal)
 
+    # Un concours repéré sur un réseau social par un site l'est aussi quand un autre site le liste.
+    sociaux = [(c["valeur"], c["fin"]) for c in candidats
+               if c["type"] in ("instagram", "facebook", "reseau") and c["valeur"] and c["fin"]]
     for c in candidats:
+        if c["type"] not in ("instagram", "facebook", "reseau") and c["valeur"] and c["fin"] and any(
+                v == c["valeur"] and abs((f - c["fin"]).days) <= 2 for v, f in sociaux):
+            c["type"] = "reseau"
+        if c["source"] == "toutgagner.com" and not c["organisateur"]:
+            rejets["lien introuvable"] = rejets.get("lien introuvable", 0) + 1
+            db.execute("DELETE FROM concours WHERE id=? AND statut='nouveau'", (c["id"],))
+            c["_rejete"] = True
+
+    for c in candidats:
+        if c.get("_rejete"):
+            continue
         ok, raison = garder(c, cfg, auj)
         if not ok:
             rejets[raison] = rejets.get(raison, 0) + 1
@@ -268,6 +282,7 @@ def liste_concours():
         c.pop("texte_brut", None)
         if re.fullmatch(r"(?i)\s*(participer|je participe|jouer|x+)?\s*", c["titre"] or ""):
             c["titre"] = c["organisateur"] or re.split(r"[.,(]", c["lots"])[0][:70]
+        c["titre"] = re.sub(r"\s*(se termine|termine|fin)\b.*$", "", c["titre"] or "", flags=re.I) or c["titre"]
         if c.get("lien_direct") == c["lien"]:
             c["lien_direct"] = None
         if not c["organisateur"]:

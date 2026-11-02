@@ -37,5 +37,6 @@ demon_du_jeu = Source(
     lien=re.compile(r"/?concours-[^/]+-jusqu-au-[^/]+\.php$"), prefixe="ldj",
     id_depuis_url=lambda u: re.sub(r"[^a-z0-9]+", "-", u.split("/")[-1].lower())[8:70],
     fin_depuis_url=_fin_demon,
+    lien_direct=re.compile(r"toconc\.php\?c=\d+"),
     orga_depuis_url=lambda u: re.search(r"concours-([^-]+(?:\.[a-z]{2,4})?)-", u.split("/")[-1]).group(1),
 )

@@ -31,6 +31,7 @@ def _une_carte(a):
         valeur = v[0] if v else None
     m = re.search(r"Les lots à gagner\s*:?\s*(.+?)(?:Dotation|Fin du jeu|Date limite|Types? de jeu|$)", brut, re.I)
     lots = m.group(1).strip() if m else brut
+    lots = re.sub(r"(Au tirage au sort|Aux instants gagnants|Au prétirage[^:]*)\s*:\s*", "", lots).strip()
     vals = montants(lots)
     valeur_lot = max(vals) if vals else valeur
 

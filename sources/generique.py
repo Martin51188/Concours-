@@ -11,7 +11,8 @@ _BRUIT = re.compile(r"\b(Participer|Je participe|Jouer|Voir le concours|Lire la 
 
 class Source:
     def __init__(self, nom, base, pages, lien, prefixe, id_depuis_url=None, fin_depuis_url=None,
-                 orga_depuis_url=None):
+                 orga_depuis_url=None, lien_direct=None):
+        self.lien_direct = lien_direct
         self.NOM, self.base, self.pages, self.lien, self.prefixe = nom, base, pages, lien, prefixe
         self.id_depuis_url = id_depuis_url or (lambda u: re.sub(r"\W+", "-", u.split("/")[-1])[-60:])
         self.fin_depuis_url = fin_depuis_url
@@ -31,7 +32,12 @@ class Source:
             vals = par_lot
         fin = (self.fin_depuis_url(url) if self.fin_depuis_url else None) or date_fin_depuis_texte(brut)
         orga = self.orga_depuis_url(url) if self.orga_depuis_url else ""
+        direct = None
+        if self.lien_direct:
+            d = carte.find("a", href=self.lien_direct)
+            direct = urljoin(self.base, d["href"]) if d else None
         return {
+            "lien_direct": direct,
             "id": f"{self.prefixe}-{self.id_depuis_url(url)}", "source": self.NOM,
             "titre": (titre or lots)[:160], "organisateur": orga[:80], "lots": lots[:400],
             "valeur": max(vals) if vals else None, "fin": fin, "type": type_depuis_texte(brut),
