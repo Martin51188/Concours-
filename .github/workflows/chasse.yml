@@ -3,6 +3,9 @@ name: Chasse aux concours
 on:
   schedule:
     - cron: "7 6,11,17 * * *"   # environ 7h, 12h et 18h (heure de Paris en hiver)
+  push:
+    branches: [main]
+    paths-ignore: ["data/**", "web/concours.json"]
   workflow_dispatch:
     inputs:
       sonde:
@@ -37,21 +40,19 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Diagnostic (pages brutes)
-        if: ${{ inputs.sonde }}
-        run: python outils/sonde.py
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.sonde }}
-        with:
-          name: sonde
-          path: sonde/
-          retention-days: 3
+      - name: Diagnostic (pages brutes des sites, branche "diagnostic")
+        if: ${{ inputs.sonde || github.event_name == 'push' }}
+        continue-on-error: true
+        run: |
+          python outils/sonde.py | tee sonde/resume.txt
+          cd sonde && git init -q -b diagnostic && git add -A
+          git -c user.name=chasseur-bot -c user.email=chasseur-bot@users.noreply.github.com commit -qm "sonde"
+          git push -fq "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" diagnostic
 
       - name: Chercher les concours
         run: python agent.py --publier
         env:
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC || 'concours-martin-49bbceca' }}
           NTFY_SEUIL: "300"
           URL_TABLEAU: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
 
@@ -59,10 +60,13 @@ jobs:
         run: |
           git config user.name "chasseur-bot"
           git config user.email "chasseur-bot@users.noreply.github.com"
-          git add data/concours.db data/journal.txt web/concours.json
+          git add -f data/concours.db data/journal.txt web/concours.json
+          git pull -q --rebase origin main || true
           git diff --cached --quiet || git commit -m "Chasse du $(date +'%d/%m %Hh%M')" && git push
 
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web
