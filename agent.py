@@ -189,6 +189,10 @@ def collecter():
                     c["valeur_estimee"], fin, c["type"], c.get("categorie"), c["lien"], c["lien_source"],
                     c["cle"], auj.isoformat(), auj.isoformat(), c.get("texte_brut", "")))
         nouveaux.append(c)
+    # Ménage : ce qui n'est plus listé nulle part depuis 2 jours (et que tu n'as pas traité) disparaît.
+    limite = (auj - dt.timedelta(days=2)).isoformat()
+    db.execute("DELETE FROM concours WHERE statut='nouveau' AND (vu_le < ? OR lower(titre) LIKE 'expired%' "
+               "OR lower(titre) LIKE 'ended%')", (limite,))
     db.commit()
     db.close()
     journal(f"{len(bruts)} lus, {len(nouveaux)} nouveaux retenus, écartés : {rejets}")
