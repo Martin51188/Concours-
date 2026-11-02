@@ -44,7 +44,7 @@ jobs:
         if: ${{ inputs.sonde || github.event_name == 'push' }}
         continue-on-error: true
         run: |
-          python outils/sonde.py | tee sonde/resume.txt
+          mkdir -p sonde && python outils/sonde.py | tee sonde/resume.txt
           cd sonde && git init -q -b diagnostic && git add -A
           git -c user.name=chasseur-bot -c user.email=chasseur-bot@users.noreply.github.com commit -qm "sonde"
           git push -fq "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" diagnostic
