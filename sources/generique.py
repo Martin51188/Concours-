@@ -22,7 +22,9 @@ class Source:
         brut = texte(carte)
         url = urljoin(self.base, a["href"])
         titre = texte(carte.find(["h2", "h3", "h4"])) or texte(a)
-        lots = re.sub(r"\s+", " ", _BRUIT.sub(" ", brut)).strip()
+        m = re.search(r"(?:Lots|Cadeaux?) à gagner\s*:?\s*(.+?)(?:Principe|Comment participer|Réponses?\s*:|Commentaires|Concours noté|Règlement|$)", brut, re.I)
+        lots = m.group(1) if m else brut
+        lots = re.sub(r"\s+", " ", _BRUIT.sub(" ", lots)).strip(" •·-")
         vals = montants(lots)
         fin = (self.fin_depuis_url(url) if self.fin_depuis_url else None) or date_fin_depuis_texte(brut)
         orga = self.orga_depuis_url(url) if self.orga_depuis_url else ""

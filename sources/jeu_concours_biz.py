@@ -7,18 +7,18 @@ from .commun import telecharger, texte, montants, date_fin_depuis_texte, type_de
 
 NOM = "jeu-concours.biz"
 BASE = "https://www.jeu-concours.biz/"
-PAGES = ["nouveaux-concours.html", "tous-les-concours.php"]
-LIEN = re.compile(r"/concours/\d+\.html")
+PAGES = ["nouveaux-concours.html"] + [f"nouveaux-concours.html?page={n}" for n in range(2, 6)] + ["concours-bientot-clos.html"]
+LIEN = re.compile(r"(?:^|/)concours/\d+\.html$")
 
 
 def _une_carte(a):
     carte = carte_autour(a, LIEN)
     brut = texte(carte)
     url = urljoin(BASE, a["href"])
-    cid = re.search(r"/concours/(\d+)\.html", url).group(1)
+    cid = re.search(r"concours/(\d+)\.html", url).group(1)
 
     orga = ""
-    lien_orga = carte.find("a", href=re.compile(r"/jeux-concours/[^/]+/?$"))
+    lien_orga = carte.find("a", href=re.compile(r"(?:^|/)jeux-concours/[^/]+/?$"))
     if lien_orga:
         orga = texte(lien_orga)
     titre_el = carte.find(["h2", "h3", "h4"])

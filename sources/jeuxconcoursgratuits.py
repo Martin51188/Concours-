@@ -28,7 +28,7 @@ def _une_carte(a):
     orga_txt = slug.rsplit("-", 1)[0].split("-")[0]
     lots = re.sub(rf"^\s*{re.escape(orga_txt)}\S*\s*", "", lots.strip(), flags=re.I)
     lots = re.sub(r"\b(Participation libre|Tirage au sort)\b", "", lots)
-    lots = re.sub(r"\s+", " ", lots).strip()
+    lots = re.sub(r"\s+", " ", lots).strip(" ·•-")
     vals = montants(propre)
     orga = slug.rsplit("-", 1)[0].split("-")[0].title()
     return {
@@ -49,6 +49,8 @@ def collecter(journal=print):
             journal(f"[{NOM}] {page} : {e}")
             continue
         for a in soup.find_all("a", href=LIEN):
+            if "assistant" in a.get_text(" ").lower():
+                continue
             href = a["href"].split("#")[0].rstrip("/")
             if href in vus:
                 continue

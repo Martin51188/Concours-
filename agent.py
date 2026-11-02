@@ -107,6 +107,8 @@ def garder(c, cfg, auj):
         return False, "se termine trop tôt"
     if c["fin"] and c["fin"] < auj:
         return False, "terminé"
+    if not c["fin"] and c["valeur"] is None:
+        return False, "infos incomplètes"
     if c["type"] in cfg["types_exclus"]:
         return False, f"type {c['type']} exclu"
     t = sans_accents(c["lots"] + " " + c.get("texte_brut", ""))

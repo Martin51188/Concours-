@@ -60,6 +60,8 @@ def collecter(journal=print):
             break
         trouves = 0
         for a in soup.find_all("a", href=LIEN):
+            if "A LA UNE" in a.find_parent().get_text(" ")[:80].upper():
+                continue
             href = a["href"].split("#")[0]
             if href in vus:
                 continue

@@ -5,20 +5,15 @@ import requests
 from sources.commun import UA
 
 PAGES = {
-    "jcb_nouveaux": "https://www.jeu-concours.biz/nouveaux-concours.html",
-    "tg_dotation": "https://toutgagner.com/jeux-concours/?par=dotation",
-    "jcg": "https://jeuxconcoursgratuits.fr/concours?sort=prize",
-    "cdn": "https://www.concours-du-net.com/nouveaux-concours",
-    "ldj": "https://www.ledemondujeu.com/nouveaux-jeux-concours.html",
-    "paradis": "https://www.leparadisdesjeuxconcours.com/",
-    "zone": "https://www.zone-concours.fr/",
+    "sb_worldwide": "https://www.sweepstakesbible.com/tags/worldwide",
+    "sa_intl": "https://www.sweepsadvantage.com/international-sweepstakes",
+    "os_worldwide": "https://online-sweepstakes.com/worldwide-giveaway/",
+    "gl_intl": "https://giveawaylisting.com/international-giveaway-list/",
+    "ofertar": "https://ofertar.pt/global-giveaways",
+    "sweepsdb": "https://sweepsdb.com/",
+    "giveawaydrop": "https://giveawaydrop.com/",
+    "paradis_fr": "https://www.leparadisdesjeuxconcours.fr/",
     "c2000": "https://www.concours2000.com/",
-    "koncours": "https://www.konkours.com/",
-    "ouah": "https://www.jeux-concours-ouah.com/",
-    "kuzeo_go_paradis": "https://www.kuzeo.com/go/leparadisdesjeuxconcours",
-    "kuzeo_go_zone": "https://www.kuzeo.com/go/zone-concours",
-    "kuzeo_go_c2000": "https://www.kuzeo.com/go/concours2000",
-    "kuzeo_go_koncours": "https://www.kuzeo.com/go/koncours",
 }
 out = pathlib.Path("sonde"); out.mkdir(exist_ok=True)
 for nom, url in PAGES.items():
