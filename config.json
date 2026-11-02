@@ -3,7 +3,8 @@
   "jours_min": 0,
   "types_exclus": [
     "instagram",
-    "facebook"
+    "facebook",
+    "reseau"
   ],
   "mots_exclus": [
     "achat obligatoire",

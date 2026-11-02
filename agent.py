@@ -27,6 +27,7 @@ import urllib.request
 from sources import jeu_concours_biz, toutgagner, jeuxconcoursgratuits
 from sources.autres import concours_du_net, demon_du_jeu
 from sources.monde import sweepstakes_bible, sweepsdb
+from sources.liens import resoudre_tous
 from sources.commun import estimer_valeur, sans_accents
 
 ICI = Path(__file__).resolve().parent
@@ -38,7 +39,7 @@ SOURCES = [jeu_concours_biz, toutgagner, jeuxconcoursgratuits, concours_du_net, 
 CONFIG_DEFAUT = {
     "valeur_min": 100,
     "jours_min": 0,
-    "types_exclus": ["instagram", "facebook"],
+    "types_exclus": ["instagram", "facebook", "reseau"],
     "mots_exclus": ["achat obligatoire", "preuve d'achat", "ticket de caisse", "réservé aux enfants",
                     "belgique uniquement", "suisse uniquement", "canada", "québec", "luxembourg uniquement",
                     "us residents only", "u.s. residents", "legal residents of the united states", "open to us", "usa only", "uk residents only", "uk only", "residents of canada"],
@@ -76,6 +77,9 @@ def connexion():
         lien TEXT, lien_source TEXT, cle TEXT, ajoute_le TEXT, vu_le TEXT,
         statut TEXT DEFAULT 'nouveau', statut_le TEXT, texte_brut TEXT)""")
     db.execute("CREATE INDEX IF NOT EXISTS i_cle ON concours(cle)")
+    cols = {r[1] for r in db.execute("PRAGMA table_info(concours)")}
+    if "lien_direct" not in cols:
+        db.execute("ALTER TABLE concours ADD COLUMN lien_direct TEXT")
     return db
 
 
@@ -192,6 +196,7 @@ def collecter():
             journal(f"[{src.NOM}] ERREUR {e}")
 
     rejets = {}
+    candidats = []
     for c in bruts:
         c["valeur_estimee"] = 0
         if c["valeur"] is None:
@@ -205,20 +210,38 @@ def collecter():
             continue
         c["cle"] = cle_doublon(c)
         fin = c["fin"].isoformat() if c["fin"] else None
-        existe = db.execute("SELECT id FROM concours WHERE id=?", (c["id"],)).fetchone()
-        if existe:
+        ligne = db.execute("SELECT lien_direct FROM concours WHERE id=?", (c["id"],)).fetchone()
+        if ligne and ligne[0]:
             db.execute("UPDATE concours SET vu_le=?, valeur=?, valeur_estimee=?, fin=?, lots=? WHERE id=?",
                        (auj.isoformat(), c["valeur"], c["valeur_estimee"], fin, c["lots"], c["id"]))
+            continue
+        candidats.append(c)
+
+    # Lien direct vers le formulaire + repérage des concours qui se jouent sur un réseau social
+    resoudre_tous(candidats, journal=journal)
+
+    for c in candidats:
+        ok, raison = garder(c, cfg, auj)
+        if not ok:
+            rejets[raison] = rejets.get(raison, 0) + 1
+            db.execute("DELETE FROM concours WHERE id=? AND statut='nouveau'", (c["id"],))
+            continue
+        fin = c["fin"].isoformat() if c["fin"] else None
+        lien_direct = c.get("lien_direct") or c["lien"]
+        if db.execute("SELECT 1 FROM concours WHERE id=?", (c["id"],)).fetchone():
+            db.execute("UPDATE concours SET vu_le=?, valeur=?, valeur_estimee=?, fin=?, lots=?, type=?, "
+                       "lien_direct=? WHERE id=?", (auj.isoformat(), c["valeur"], c["valeur_estimee"], fin,
+                                                    c["lots"], c["type"], lien_direct, c["id"]))
             continue
         if est_doublon(db, c, fin):
             rejets["doublon"] = rejets.get("doublon", 0) + 1
             continue
         db.execute("""INSERT INTO concours (id, source, titre, organisateur, lots, valeur, valeur_estimee, fin,
-                      type, categorie, lien, lien_source, cle, ajoute_le, vu_le, texte_brut)
-                      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                      type, categorie, lien, lien_source, cle, ajoute_le, vu_le, texte_brut, lien_direct)
+                      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                    (c["id"], c["source"], c["titre"], c["organisateur"], c["lots"], c["valeur"],
                     c["valeur_estimee"], fin, c["type"], c.get("categorie"), c["lien"], c["lien_source"],
-                    c["cle"], auj.isoformat(), auj.isoformat(), c.get("texte_brut", "")))
+                    c["cle"], auj.isoformat(), auj.isoformat(), c.get("texte_brut", ""), lien_direct))
         nouveaux.append(c)
     # Ménage : ce qui n'est plus listé nulle part depuis 2 jours (et que tu n'as pas traité) disparaît.
     limite = (auj - dt.timedelta(days=2)).isoformat()
@@ -245,6 +268,8 @@ def liste_concours():
         c.pop("texte_brut", None)
         if re.fullmatch(r"(?i)\s*(participer|je participe|jouer|x+)?\s*", c["titre"] or ""):
             c["titre"] = c["organisateur"] or re.split(r"[.,(]", c["lots"])[0][:70]
+        if c.get("lien_direct") == c["lien"]:
+            c["lien_direct"] = None
         if not c["organisateur"]:
             c["organisateur"] = c["titre"]
         c["valeur_estimee"] = bool(c["valeur_estimee"])
