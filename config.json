@@ -1,0 +1,37 @@
+{
+  "valeur_min": 100,
+  "jours_min": 0,
+  "types_exclus": [],
+  "mots_exclus": [
+    "achat obligatoire",
+    "preuve d'achat",
+    "ticket de caisse",
+    "réservé aux enfants",
+    "belgique uniquement",
+    "suisse uniquement",
+    "canada",
+    "québec",
+    "luxembourg uniquement"
+  ],
+  "mots_voulus": [
+    "iphone",
+    "ps5",
+    "voyage",
+    "chèque",
+    "carte cadeau",
+    "ordinateur",
+    "switch"
+  ],
+  "age_utilisateur": 18,
+  "profil": {
+    "civilite": "M.",
+    "prenom": "",
+    "nom": "",
+    "email": "",
+    "telephone": "",
+    "adresse": "",
+    "code_postal": "",
+    "ville": "",
+    "date_naissance": ""
+  }
+}

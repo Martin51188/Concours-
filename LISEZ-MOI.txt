@@ -1,0 +1,47 @@
+CHASSEUR DE CONCOURS
+====================
+
+Ce que ça fait
+--------------
+L'agent parcourt chaque jour 3 sites qui recensent les jeux concours français
+(jeu-concours.biz, toutgagner.com, jeuxconcoursgratuits.fr), lit les lots, leur
+valeur, la date de fin et le type, enlève les doublons et les petits lots, puis
+te classe les meilleurs dans un tableau de bord.
+
+Tu cliques sur « Participer », le concours s'ouvre, tu cliques sur ton favori
+« ✍ Remplir concours » pour préremplir tes infos, tu coches le règlement et tu
+valides. Environ 20 secondes par concours.
+
+Pourquoi tu valides toi-même : presque tous les règlements précisent que les
+participations faites par un robot sont annulées. Valider toi-même, c'est ce
+qui fait que tes gains comptent.
+
+Démarrer
+--------
+1. Double-clic sur  Lancer.bat  (la première fois, il installe ce qu'il faut).
+2. Le tableau de bord s'ouvre dans ton navigateur.
+3. Ouvre « Mon profil & réglages » : remplis tes infos, puis glisse le bouton
+   « ✍ Remplir concours » dans ta barre de favoris (Ctrl+Maj+B pour l'afficher).
+4. Clique sur « Chercher de nouveaux concours ».
+
+Recherche automatique tous les jours
+------------------------------------
+Double-clic sur  Activer-recherche-quotidienne.bat  : l'agent tourne tous les
+jours à 18 h et t'envoie une notification s'il trouve des concours.
+Pour arrêter : Desactiver-recherche-quotidienne.bat
+
+Réglages utiles (dans le tableau de bord)
+-----------------------------------------
+- Valeur minimum d'un lot (100 € par défaut)
+- Types à exclure (ex. Instagram / Facebook si tu ne veux pas poster)
+- Mots à exclure (ex. « achat obligatoire ») et mots qui font remonter un
+  concours (ex. « iphone », « voyage »)
+
+Fichiers
+--------
+agent.py        l'agent (collecte + tri)
+sources/        un extracteur par site
+serveur.py      le petit serveur du tableau de bord (http://127.0.0.1:8765)
+web/            le tableau de bord
+data/           ta base de concours + le journal des passages
+config.json     tes réglages et ton profil (reste sur ton PC)
