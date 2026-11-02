@@ -1,0 +1,14 @@
+det_jeuxconcoursgratuits_0 200   117898 o  -> https://jeuxconcoursgratuits.fr/concours/cash/pepsico-100-000-menus-colonel-original-gubi
+det_jeuxconcoursgratuits_1 200   124273 o  -> https://jeuxconcoursgratuits.fr/concours/high-tech/rainbow6-ubi-com-ordinateur-gamer-4250-pctn
+det_sweepstakesbible_0 200    91948 o  -> https://www.sweepstakesbible.com/giveaways/ski-utah-super-stoked-snowy-sweepstakes-2026
+det_sweepstakesbible_1 200    85497 o  -> https://www.sweepstakesbible.com/giveaways/pfl-road-to-dubai-trip-sweepstakes
+det_toutgagner_0     200     2279 o  -> https://toutgagner.com/concours/g2217639.html
+det_toutgagner_1     200     2240 o  -> https://toutgagner.com/concours/g2219036.html
+det_jeu-concours_0   200     1355 o  -> https://www.jeu-concours.biz/concours/479875.html
+det_jeu-concours_1   200     1584 o  -> https://www.jeu-concours.biz/concours/480935.html
+det_ledemondujeu_0   200   128921 o  -> https://www.ledemondujeu.com/concours-delko.fr-gagnez-1-voiture-100-electrique-customisee-par-un-artiste-jusqu-au-30-novembre-2026.php
+det_ledemondujeu_1   200   104289 o  -> https://www.ledemondujeu.com/concours-ici.fr-gagnez-2-bons-sejours-belambra-clubs-de-5000-jusqu-au-06-novembre-2026.php
+det_concours-du-net_0 200   165130 o  -> https://www.concours-du-net.com/jeu-concours-vertbaudet-aa0f1394d75408ff
+det_concours-du-net_1 200   162489 o  -> https://www.concours-du-net.com/jeu-concours-thebradery-be33de57cfcd6111
+det_sweepsdb_0       200      210 o  -> https://swps.me/6ixg9
+det_sweepsdb_1       200      210 o  -> https://swps.me/jgnzf
