@@ -116,3 +116,15 @@
 2026-11-04 15:26 667 lus, 85 nouveaux retenus, écartés : {'type instagram exclu': 239, 'valeur trop faible': 40, 'type facebook exclu': 44, 'infos incomplètes': 1, "tranche d'âge": 1, 'se termine trop tôt': 34, 'lien introuvable': 25, 'doublon': 88, 'type reseau exclu': 18}
 2026-11-04 15:26 concours.json publié (295 concours)
 2026-11-04 15:26 notification envoyée (14 concours)
+2026-11-04 23:36 [jeu-concours.biz] nouveaux-concours.html?page=2 : ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-11-04 23:36 [jeu-concours.biz] 129 concours lus
+2026-11-04 23:36 [toutgagner.com] 80 concours lus
+2026-11-04 23:36 [jeuxconcoursgratuits.fr] 96 concours lus
+2026-11-04 23:36 [concours-du-net.com] 48 concours lus
+2026-11-04 23:36 [ledemondujeu.com] 243 concours lus
+2026-11-04 23:37 [sweepstakesbible.com] 5 concours lus
+2026-11-04 23:37 [sweepsdb.com] 19 concours lus
+2026-11-04 23:37 liens directs trouvés : 115/176 · concours sur réseaux sociaux repérés : 68
+2026-11-04 23:37 620 lus, 5 nouveaux retenus, écartés : {'type instagram exclu': 215, 'valeur trop faible': 41, 'type facebook exclu': 38, 'infos incomplètes': 1, "tranche d'âge": 1, 'se termine trop tôt': 34, 'lien introuvable': 27, 'doublon': 75, 'type reseau exclu': 17}
+2026-11-04 23:37 concours.json publié (300 concours)
+2026-11-04 23:37 notification envoyée (1 concours)
