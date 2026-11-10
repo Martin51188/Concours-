@@ -226,3 +226,14 @@
 2026-11-09 17:06 691 lus, 65 nouveaux retenus, écartés : {'type instagram exclu': 274, 'valeur trop faible': 38, "mot exclu « preuve d'achat »": 1, 'type facebook exclu': 49, 'infos incomplètes': 3, "tranche d'âge": 1, 'se termine trop tôt': 58, 'mot exclu « canada »': 1, 'lien introuvable': 30, 'doublon': 42, 'type reseau exclu': 20}
 2026-11-09 17:06 concours.json publié (270 concours)
 2026-11-09 17:06 notification envoyée (11 concours)
+2026-11-10 01:40 [jeu-concours.biz] 192 concours lus
+2026-11-10 01:40 [toutgagner.com] 82 concours lus
+2026-11-10 01:41 [jeuxconcoursgratuits.fr] 99 concours lus
+2026-11-10 01:41 [concours-du-net.com] 48 concours lus
+2026-11-10 01:41 [ledemondujeu.com] 260 concours lus
+2026-11-10 01:41 [sweepstakesbible.com] 5 concours lus
+2026-11-10 01:41 [sweepsdb.com] 19 concours lus
+2026-11-10 01:41 liens directs trouvés : 145/216 · concours sur réseaux sociaux repérés : 50
+2026-11-10 01:41 705 lus, 77 nouveaux retenus, écartés : {'type instagram exclu': 230, 'valeur trop faible': 37, 'type facebook exclu': 80, "mot exclu « preuve d'achat »": 3, 'mot exclu « canada »': 4, 'infos incomplètes': 2, 'se termine trop tôt': 55, "tranche d'âge": 1, 'lien introuvable': 29, 'type reseau exclu': 34, 'doublon': 48}
+2026-11-10 01:41 concours.json publié (258 concours)
+2026-11-10 01:42 notification impossible : <urlopen error [Errno 101] Network is unreachable>
