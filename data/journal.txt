@@ -338,3 +338,13 @@
 2026-11-14 14:27 762 lus, 56 nouveaux retenus, écartés : {'type instagram exclu': 282, 'type facebook exclu': 71, 'valeur trop faible': 33, 'se termine trop tôt': 74, 'infos incomplètes': 1, "tranche d'âge": 2, 'mot exclu « canada »': 1, 'lien introuvable': 26, 'type reseau exclu': 25, 'doublon': 53}
 2026-11-14 14:27 concours.json publié (328 concours)
 2026-11-14 14:27 notification envoyée (9 concours)
+2026-11-14 22:25 [jeu-concours.biz] 226 concours lus
+2026-11-14 22:26 [toutgagner.com] 81 concours lus
+2026-11-14 22:26 [jeuxconcoursgratuits.fr] 99 concours lus
+2026-11-14 22:26 [concours-du-net.com] 48 concours lus
+2026-11-14 22:26 [ledemondujeu.com] 294 concours lus
+2026-11-14 22:26 [sweepstakesbible.com] 5 concours lus
+2026-11-14 22:26 [sweepsdb.com] 8 concours lus
+2026-11-14 22:27 liens directs trouvés : 99/157 · concours sur réseaux sociaux repérés : 56
+2026-11-14 22:27 761 lus, 11 nouveaux retenus, écartés : {'type instagram exclu': 287, 'type facebook exclu': 71, 'valeur trop faible': 33, 'se termine trop tôt': 74, 'infos incomplètes': 1, "tranche d'âge": 2, 'mot exclu « canada »': 1, 'lien introuvable': 26, 'type reseau exclu': 23, 'doublon': 51}
+2026-11-14 22:27 concours.json publié (339 concours)
